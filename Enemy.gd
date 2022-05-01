@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 
 export var thrust_power = 50
+export (PackedScene) var bullet
 export (PackedScene) var explosion
 signal give_points(point_value)
 
@@ -11,14 +12,25 @@ var thrust_angle = 0
 var velocity = Vector2.ZERO
 var body_avoiding = null
 var body_seeking = null
+var obstacles_in_sensors = []
 
 func _physics_process(delta):
+	var closest_obstacle
 	var angle_to_body
 	var engine_power = 1
-	if body_avoiding:
-		angle_to_body = get_angle_to(body_avoiding.get_global_position())
+	if len(obstacles_in_sensors) > 0:
+		for obstacle in obstacles_in_sensors:
+			if closest_obstacle:
+				var closest_obstacle_distance = get_global_position().distance_to(closest_obstacle.get_global_position())
+				var obstacle_distance = get_global_position().distance_to(obstacle.get_global_position())
+				if obstacle_distance < closest_obstacle_distance:
+					closest_obstacle = obstacle
+			else:
+				closest_obstacle = obstacle 
+	if closest_obstacle:
+		angle_to_body = get_angle_to(closest_obstacle.get_global_position())
 		thrust_angle = angle_to_body + PI
-	elif body_seeking:
+	elif is_instance_valid(body_seeking):
 		angle_to_body = get_angle_to(body_seeking.get_global_position())
 		thrust_angle = angle_to_body
 	else:
@@ -41,15 +53,22 @@ func on_hit_something():
 
 func _on_SensorArea_body_entered(body):
 	if body.is_in_group("asteroids"):
+		obstacles_in_sensors.push_back(body)
 		var asteroid_distance = get_global_position().distance_to(body.get_global_position())
 		if body_avoiding and asteroid_distance < get_global_position().distance_to(body_avoiding.get_global_position()):
 			body_avoiding = body
-		else:
-			body_avoiding = body
-	if body.is_in_group("player"):
-		body_seeking = body
 		
 
 func _on_SensorArea_body_exited(body):
+	if body.is_in_group("asteroids"):
+		obstacles_in_sensors.erase(body)
 	if body == body_avoiding:
 		body_avoiding = null
+
+
+func _on_Cooldown_timeout():
+	if is_instance_valid(body_seeking):
+		var shot = bullet.instance()
+		shot.position = position
+		shot.target = body_seeking
+		get_parent().add_child(shot)	

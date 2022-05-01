@@ -25,12 +25,10 @@ radius = 8.51149
 [sub_resource type="CircleShape2D" id=5]
 radius = 16.5593
 
-[node name="Asteroid" type="RigidBody2D" groups=[
-"asteroids",
-]]
+[node name="Asteroid" type="RigidBody2D" groups=["asteroids"]]
 position = Vector2( 0, 1 )
 collision_layer = 4
-collision_mask = 7
+collision_mask = 15
 physics_material_override = SubResource( 1 )
 gravity_scale = 0.0
 contacts_reported = 2

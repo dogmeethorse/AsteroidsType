@@ -8,6 +8,7 @@ onready var sprite = $Sprite
 var velocity = Vector2(200,0)
 
 func _ready():
+	$Sound.play()
 	velocity = velocity.rotated(rotation)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -22,8 +23,10 @@ func _on_Lifespan_timeout():
 	queue_free()
 
 func on_hit_something():
-	#set_deferred("collision_shape.disabled", true)
-	collision_shape.queue_free()
+	#bug here where tries to call after deleted
+	#rare and hard to catch when it happens
+	if is_instance_valid(collision_shape):
+		collision_shape.queue_free()  
 	sprite.visible = false
 	red_particles.emitting = true
 	particle_timer.start()

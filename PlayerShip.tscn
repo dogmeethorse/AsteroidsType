@@ -18,9 +18,7 @@ _data = [ Vector2( 0.0428571, 1.28417 ), 0.0, 0.0, 0, 0, Vector2( 0.931429, 6.93
 min_value = -1.0
 _data = [ Vector2( 0, -0.651869 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
-[node name="PlayerShip" type="KinematicBody2D" groups=[
-"player",
-]]
+[node name="PlayerShip" type="KinematicBody2D" groups=["player"]]
 collision_mask = 4
 script = ExtResource( 2 )
 bullet = ExtResource( 3 )
@@ -55,4 +53,5 @@ __meta__ = {
 [node name="CoolDown" type="Timer" parent="."]
 process_mode = 0
 wait_time = 0.5
+
 [connection signal="timeout" from="CoolDown" to="." method="_on_cooldown_timeout"]

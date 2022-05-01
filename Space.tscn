@@ -1,10 +1,15 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://PlayerShip.tscn" type="PackedScene" id=1]
 [ext_resource path="res://asteroid.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Space.gd" type="Script" id=3]
 [ext_resource path="res://Enemy.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Start.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sound/398957__prof-mudkip__hit-hurt.wav" type="AudioStream" id=6]
+[ext_resource path="res://sound/84344__sandyrb__reverb-upphase.wav" type="AudioStream" id=7]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 46.196
 
 [node name="Space" type="Node2D"]
 script = ExtResource( 3 )
@@ -14,23 +19,41 @@ ships = ExtResource( 4 )
 [node name="PlayerShip" parent="." instance=ExtResource( 1 )]
 position = Vector2( 512.899, 376.862 )
 
-[node name="SpawnPoint1" type="Position2D" parent="."]
+[node name="SpawnPoint1" type="Area2D" parent="."]
 position = Vector2( 134.25, 86.5416 )
 
-[node name="SpawnPoint2" type="Position2D" parent="."]
-position = Vector2( 896.483, 92.0892 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoint1"]
+shape = SubResource( 1 )
 
-[node name="SpawnPoint3" type="Position2D" parent="."]
-position = Vector2( 136.469, 359.481 )
+[node name="SpawnPoint2" type="Area2D" parent="."]
+position = Vector2( 912.776, 76.0933 )
 
-[node name="SpawnPoint4" type="Position2D" parent="."]
-position = Vector2( 900.921, 352.824 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoint2"]
+shape = SubResource( 1 )
 
-[node name="SpawnPoint5" type="Position2D" parent="."]
-position = Vector2( 133.141, 599.134 )
+[node name="SpawnPoint3" type="Area2D" parent="."]
+position = Vector2( 121.836, 371.762 )
 
-[node name="SpawnPoint6" type="Position2D" parent="."]
-position = Vector2( 894.264, 617.996 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoint3"]
+shape = SubResource( 1 )
+
+[node name="SpawnPoint4" type="Area2D" parent="."]
+position = Vector2( 906.842, 384.714 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoint4"]
+shape = SubResource( 1 )
+
+[node name="SpawnPoint5" type="Area2D" parent="."]
+position = Vector2( 119.836, 621.762 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoint5"]
+shape = SubResource( 1 )
+
+[node name="SpawnPoint6" type="Area2D" parent="."]
+position = Vector2( 909.842, 618.714 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoint6"]
+shape = SubResource( 1 )
 
 [node name="AsteroidSpawner" type="Timer" parent="."]
 wait_time = 8.0
@@ -52,6 +75,13 @@ text = "SCORE: 0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AsteroidBreakSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[node name="ShipSpawnSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
 [connection signal="player_ship_destroyed" from="PlayerShip" to="." method="_on_PlayerShip_player_ship_destroyed"]
 [connection signal="timeout" from="AsteroidSpawner" to="." method="_on_AsteroidSpawner_timeout"]
 [connection signal="timeout" from="ShipSpawner" to="." method="_on_ShipSpawner_timeout"]

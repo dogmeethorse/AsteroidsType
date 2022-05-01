@@ -54,7 +54,7 @@ func on_hit_something():
 	get_parent().add_child(my_explosion)
 	my_explosion.explode()
 	emit_signal("player_ship_destroyed")
-	queue_free()
+	call_deferred("free")
 	
 	
 func _on_cooldown_timeout():

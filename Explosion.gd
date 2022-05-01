@@ -5,6 +5,7 @@ onready var explosion_timer = $ExplosionTimer
 
 func explode():
 	emitting = true
+	$Sound.play()
 	explosion_timer.start()
 
 
